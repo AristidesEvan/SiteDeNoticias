@@ -1,17 +1,15 @@
 package com.noticiasonline.demo.model;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario {
@@ -19,23 +17,23 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String nome;
 
-    @JsonIgnoreProperties({"seguindo", "seguidores"})
-    @ManyToMany
-    @JoinTable(
-        name = "seguidores_seguindo",
-        joinColumns = @JoinColumn(name = "seguido_id"),
-        inverseJoinColumns = @JoinColumn(name = "seguidor_id")
-    )
-    private List<Usuario> seguidores; // Lista de quem segue este usuário
+    @Column(nullable = false, length = 100)
+    private String email;
 
-    @JsonIgnoreProperties({"seguidores", "seguindo"})
-    @ManyToMany(mappedBy = "seguidores")
-    private List<Usuario> seguindo; // Lista de quem este usuário segue
+    @Column(nullable = false, length = 255)
+    private String senha;
 
-    // Construtores, getters e setters
+    @Column(nullable = false)
+    private LocalDate dataDeRegistro;
+
+    @Column(nullable = false)
+    private String tipo;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL) // Muitas notícias podem pertencer a um usuário
+    private List<Noticia> noticias;
 
     public Long getId() { return id; }
 
@@ -44,13 +42,5 @@ public class Usuario {
     public String getNome() { return nome; }
 
     public void setNome(String nome) { this.nome = nome; }
-
-    public List<Usuario> getSeguidores() { return seguidores; }
-
-    public void setSeguidores(List<Usuario> seguidores) { this.seguidores = seguidores; }
-
-    public List<Usuario> getSeguindo() { return seguindo; }
-
-    public void setSeguindo(List<Usuario> seguindo) { this.seguindo = seguindo; }
 
 }
