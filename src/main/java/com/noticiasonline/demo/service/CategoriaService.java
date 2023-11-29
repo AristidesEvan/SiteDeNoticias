@@ -14,15 +14,15 @@ public class CategoriaService {
     @Autowired
     private CategoriaData categoriaData;
 
-        public List<Categoria> pegarTodasAsNoticias() {
+        public List<Categoria> pegarTodasAsCategorias() {
         return (List<Categoria>) categoriaData.findAll();
     }
 
-    public Categoria salvarNoticia(Categoria categoria) {
+    public Categoria salvarCategoria(Categoria categoria) {
         return categoriaData.save(categoria);
     }
 
-    public Categoria atualizarNoticia(Categoria categoria) {
+    public Categoria atualizarCategoria(Categoria categoria) {
         return categoriaData.save(categoria);
     }
 
