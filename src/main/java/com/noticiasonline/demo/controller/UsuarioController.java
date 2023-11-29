@@ -21,20 +21,20 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping("/")
-    public List<Usuario> getAllUsuarios() {
-        return usuarioService.getAllUsuarios();
+    public List<Usuario> pegarTodosOsUsuarios() {
+        return usuarioService.pegarTodosOsUsuarios();
     }
 
     @PostMapping("/")
-    public Usuario insertUsuario(@RequestBody Usuario usuario) {
+    public Usuario salvarUsuario(@RequestBody Usuario usuario) {
         
-        return usuarioService.insertUsuario(usuario);
+        return usuarioService.salvarUsuario(usuario);
     }
     
     @PutMapping("/")
-    public Usuario updateUsuario(@RequestBody Usuario usuario) {
+    public Usuario atualizarUsuario(@RequestBody Usuario usuario) {
 
-        return usuarioService.updateUsuario(usuario);
+        return usuarioService.atualizarUsuario(usuario);
     }
 
 }

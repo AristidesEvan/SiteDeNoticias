@@ -14,16 +14,20 @@ public class UsuarioService {
     @Autowired
     private UsuarioData usuarioData;
 
-    public List<Usuario> getAllUsuarios() {
+    public List<Usuario> pegarTodosOsUsuarios() {
         return (List<Usuario>) usuarioData.findAll();
     }
 
-    public Usuario insertUsuario(Usuario usuario) {
+    public Usuario salvarUsuario(Usuario usuario) {
         return usuarioData.save(usuario);
     }
 
-    public Usuario updateUsuario(Usuario usuario) {
+    public Usuario atualizarUsuario(Usuario usuario) {
         return usuarioData.save(usuario);
+    }
+
+    public void deletarUsuario(Long usuarioId) {
+        usuarioData.deleteById(usuarioId);
     }
 
 }
