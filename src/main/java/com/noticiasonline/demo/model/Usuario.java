@@ -63,6 +63,4 @@ public class Usuario {
 
     public void setNoticias(List<Noticia> noticias) { this.noticias = noticias; }
 
-    
-
 }
