@@ -43,4 +43,26 @@ public class Usuario {
 
     public void setNome(String nome) { this.nome = nome; }
 
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public String getSenha() { return senha; }
+
+    public void setSenha(String senha) { this.senha = senha; }
+
+    public LocalDate getDataDeRegistro() { return dataDeRegistro; }
+
+    public void setDataDeRegistro(LocalDate dataDeRegistro) { this.dataDeRegistro = dataDeRegistro; }
+
+    public String getTipo() { return tipo; }
+
+    public void setTipo(String tipo) { this.tipo = tipo; }
+
+    public List<Noticia> getNoticias() { return noticias; }
+
+    public void setNoticias(List<Noticia> noticias) { this.noticias = noticias; }
+
+    
+
 }
