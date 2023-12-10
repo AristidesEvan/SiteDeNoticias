@@ -5,23 +5,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="cadastro.css" />
 </head>
 
 <body>
-    <form id="registrationForm">
-        <label for="nome">Nome:</label><br />
-        <input type="text" id="nome" name="nome" /><br />
-        <label for="email">Email:</label><br />
-        <input type="email" id="email" name="email" /><br />
-        <label for="senha">Senha:</label><br />
-        <input type="password" id="senha" name="senha" /><br />
-        <label for="tipo">Tipo de usuário:</label><br />
-        <select id="tipo" name="tipo">
-            <option value="leitor">Leitor</option>
-            <option value="editor">Editor</option>
-        </select><br />
-        <input type="submit" value="Cadastrar" />
-    </form>
+    <div class="form-card">
+        <form id="registrationForm">
+            <h1 class="title-login">Cadastro</h1>
+            <p>Digite os seus dados necessários para cadastro:</p>
+            <span class="oculto">Email já cadastrado!</span> <!-- Caso retorne um erro! -->
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" />
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" />
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" />
+            <label for="tipo">Tipo de usuário:
+
+                <select id="tipo" name="tipo">
+                    <option value="leitor">Leitor</option>
+                    <option value="editor">Editor</option>
+                </select>
+
+            </label>
+            <input class="btn-cadastro" type="submit" value="Cadastrar" />
+        </form>
+    </div>
 
     <script>
         var dadosDoUsuario;
@@ -67,6 +77,6 @@
                     });
             });
     </script>
-</body>
 
+</body>
 </html>

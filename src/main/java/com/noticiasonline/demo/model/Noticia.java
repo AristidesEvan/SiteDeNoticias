@@ -33,4 +33,28 @@ public class Noticia {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
+
+    public String getTitulo() { return titulo; }
+
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+
+    public String getConteudo() { return conteudo; }
+
+    public void setConteudo(String conteudo) { this.conteudo = conteudo; }
+
+    public LocalDate getDataDePublicacao() { return dataDePublicacao; }
+
+    public void setDataDePublicacao(LocalDate dataDePublicacao) { this.dataDePublicacao = dataDePublicacao; }
+
+    public Usuario getAutor() { return autor; }
+
+    public void setAutor(Usuario autor) { this.autor = autor; }
+
+    public Categoria getCategoria() { return categoria; }
+
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
+    
 }
