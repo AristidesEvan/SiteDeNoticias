@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="categoria.css" />
+</head>
+
+<body>
+    <div class="container">
+        <!-- Outros elementos da página aqui -->
+
+        <form class="cadastro-categoria">
+            <label for="categoria">Nome da categoria!</label>
+            <input type="text" id="categoria" name="categoria" required />
+
+            <a href="noticias.html">Voltar as noticias!</a>
+
+            <input type="submit" class="btn-categoria" value="Cadastrar Categoria" />
+        </form>
+    </div>
+
+    <script>
+        document
+            .getElementById("cadastro-categoria")
+            .addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                var categoria = document.getElementById("categoria").value;
+
+                var data = {
+                    categoria: categoria,
+                };
+
+                fetch("http://localhost/categoria/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log("Success:", data);
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
+            });
+    </script>
+</body>
+
+</html>

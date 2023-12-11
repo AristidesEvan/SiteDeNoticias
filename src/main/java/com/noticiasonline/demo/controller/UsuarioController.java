@@ -37,6 +37,16 @@ public class UsuarioController {
         Usuario usuarioSalvo = usuarioService.salvarUsuario(usuario);
         return ResponseEntity.ok(usuarioSalvo);
     }
+    
+    @PostMapping("/validar")
+    public ResponseEntity<Usuario> validarEmailESenha(@RequestBody Usuario usuario) {
+        Usuario usuarioValidado = usuarioService.validarEmailESenha(usuario.getEmail(), usuario.getSenha());
+        if (usuarioValidado != null) {
+            return ResponseEntity.ok(usuarioValidado);
+        } else {
+            return ResponseEntity.status(401).body(null);
+        }
+    }
 
     @PostMapping("/")
     public Usuario salvarUsuario(@RequestBody Usuario usuario) {

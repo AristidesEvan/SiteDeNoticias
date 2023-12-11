@@ -11,6 +11,24 @@
 
 <body>
 
+    <script>
+        // Função para verificar se os dados do usuário estão na sessionStorage
+        function verificarLogin() {
+            // Recuperar os dados da sessionStorage
+            var userData = JSON.parse(sessionStorage.getItem('userData'));
+            console.log(userData);
+
+            // Verificar se os dados do usuário existem
+            if (userData.nome == null) {
+                // Redirecionar para a página de login
+                window.location.href = "index.html";
+            }
+        }
+
+        // Chamar a função ao entrar na página
+        window.onload = verificarLogin;
+    </script>
+
     <div class="container">
 
         <div class="respiro"></div>

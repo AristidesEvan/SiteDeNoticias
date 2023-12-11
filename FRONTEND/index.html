@@ -39,7 +39,7 @@
                     senha: senha,
                 };
 
-                fetch("http://localhost:8080/usuarios/login", {
+                fetch("http://localhost:8080/usuarios/validar", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -49,6 +49,12 @@
                     .then((response) => response.json())
                     .then((data) => {
                         console.log("Success:", data);
+                        sessionStorage.setItem('userData', JSON.stringify(data));
+
+                        var storedUserData = JSON.parse(sessionStorage.getItem('userData'));
+                        console.log(storedUserData.email);
+
+                        window.location.href = "http://127.0.0.1:5500/FRONTEND/noticias.html";
                     })
                     .catch((error) => {
                         console.error("Error:", error);
