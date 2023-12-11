@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,92 @@
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="noticias.css">
 </head>
+
 <body>
-    
+
+    <div class="container">
+
+        <div class="respiro"></div>
+        <div class="menu-lateral">
+            <div class="logo">NoticIAI</div>
+
+            <div class="categorias">
+                <div class="categoria-titulo">Categorias!</div>
+                <div class="categoria">Futebol</div>
+                <div class="categoria">Mercado</div>
+            </div>
+
+            <div class="filtro-data">
+                <label for="data">Filtra por Data</label>
+                <input type="date" name="data" id="data">
+            </div>
+
+            <div class="funcao">
+                <div class="sair">
+                    <img src="assets/img/sair.png" alt="">
+                </div>
+                <div class="cadastrar-categoria">
+                    <img src="assets/img/categoria.png" alt="">
+                </div>
+                <div class="criar-noticia">
+                    <img src="assets/img/criar.png" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="noticias">
+            <div class="noticia">
+                <div class="titulo">
+                    Titulo da notícia
+                    <div class="categoria">
+                        futebol
+                    </div>
+                </div>
+
+                <div class="conteudo">
+                    Barcelona e Girona fizeram um ótimo primeiro tempo em Montjuic, e o time visitante foi para o
+                    intervalo na frente. Confirmando por que está brigando pela ponta da tabela, o Girona começou melhor
+                    e abriu o placar com Dovbyk, aos 11 minutos. Lewandowski empatou aos 18, de cabeça, após escanteio
+                    de Raphinha, mas a sensação do Espanhol voltou a liderar o placar aos 39, graças a um bonito gol de
+                    Miguel Gutiérrez, em chute da entrada da área.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        fetch('http://localhost/noticias/')
+            .then(response => response.json())
+            .then(data => {
+                const noticiasDiv = document.querySelector('.noticias');
+
+                data.forEach(noticia => {
+                    const noticiaElement = document.createElement('div');
+                    noticiaElement.className = 'noticia';
+
+                    const tituloElement = document.createElement('div');
+                    tituloElement.className = 'titulo';
+                    tituloElement.textContent = noticia.titulo;
+
+                    const categoriaElement = document.createElement('div');
+                    categoriaElement.className = 'categoria';
+                    categoriaElement.textContent = noticia.categoria;
+
+                    const conteudoElement = document.createElement('div');
+                    conteudoElement.className = 'conteudo';
+                    conteudoElement.textContent = noticia.conteudo;
+
+                    noticiaElement.appendChild(tituloElement);
+                    noticiaElement.appendChild(categoriaElement);
+                    noticiaElement.appendChild(conteudoElement);
+
+                    noticiasDiv.appendChild(noticiaElement);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
 </body>
+
 </html>

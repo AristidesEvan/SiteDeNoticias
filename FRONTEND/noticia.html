@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="noticia.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Outros elementos da página aqui -->
+
+        <form class="cadastro-noticia">
+            <label for="titulo">Título da Notícia</label>
+            <input type="text" id="titulo" name="titulo" required>
+
+            <label for="categoria">Categoria da Notícia</label>
+            <select id="categoria" name="categoria" required>
+                <option value="futebol">Futebol</option>
+                <option value="mercado">Mercado</option>
+                <!-- Mais opções aqui -->
+            </select>
+
+            <label for="conteudo">Conteúdo da Notícia</label>
+            <textarea id="conteudo" name="conteudo" required></textarea>
+
+            <a href="noticias.html">Voltar as noticias!</a>
+
+            <input type="submit" class="btn-noticia" value="Cadastrar Notícia">
+        </form>
+    </div>
+
+    <script>
+        document.querySelector('.cadastro-noticia').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const titulo = document.querySelector('#titulo').value;
+            const categoria = document.querySelector('#categoria').value;
+            const conteudo = document.querySelector('#conteudo').value;
+
+            const noticia = {
+                titulo: titulo,
+                categoria: categoria,
+                conteudo: conteudo
+            };
+
+            fetch('http://localhost/noticias/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(noticia)
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+        });
+
+    </script>
+</body>
+
+</html>
