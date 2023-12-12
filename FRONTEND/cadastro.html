@@ -31,14 +31,11 @@
             </label>
             <input class="btn-cadastro" type="submit" value="Cadastrar" />
         </form>
+        
     </div>
 
     <script>
-        var dadosDoUsuario;
-
-        document
-            .getElementById("registrationForm")
-            .addEventListener("submit", function (e) {
+        document.getElementById("registrationForm").addEventListener("submit", function (e) {
                 e.preventDefault();
 
                 var nome = document.getElementById("nome").value;
@@ -62,15 +59,13 @@
                 })
                     .then((response) => response.json())
                     .then((data) => {
-
-                        sessionStorage.setItem("usuario", JSON.stringify(data))
-                        // var usuarioArmazenado = JSON.parse(sessionStorage.getItem("usuario"));
-
-                        window.location.href = "http://127.0.0.1:5500/FRONTEND/login.html";
-
-                        window.location.reload();
-
                         console.log("Success:", data);
+                        sessionStorage.setItem('userData', JSON.stringify(data));
+
+                        var storedUserData = JSON.parse(sessionStorage.getItem('userData'));
+                        console.log(storedUserData.email);
+
+                        window.location.href = "http://127.0.0.1:5500/FRONTEND/noticias.html";
                     })
                     .catch((error) => {
                         console.error("Error:", error);

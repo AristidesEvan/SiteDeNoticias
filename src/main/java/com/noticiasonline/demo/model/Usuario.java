@@ -3,6 +3,8 @@ package com.noticiasonline.demo.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +34,7 @@ public class Usuario {
     @Column(nullable = false)
     private String tipo;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL) // Muitas notícias podem pertencer a um usuário
     private List<Noticia> noticias;
 

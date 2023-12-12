@@ -13,7 +13,7 @@
     <div class="container">
         <!-- Outros elementos da página aqui -->
 
-        <form class="cadastro-categoria">
+        <form id="cadastro-categoria">
             <label for="categoria">Nome da categoria!</label>
             <input type="text" id="categoria" name="categoria" required />
 
@@ -32,10 +32,10 @@
                 var categoria = document.getElementById("categoria").value;
 
                 var data = {
-                    categoria: categoria,
+                    categoria : categoria
                 };
 
-                fetch("http://localhost/categoria/", {
+                fetch("http://localhost:8080/categorias/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

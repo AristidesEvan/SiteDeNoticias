@@ -14,7 +14,7 @@ public class CategoriaService {
     @Autowired
     private CategoriaData categoriaData;
 
-        public List<Categoria> pegarTodasAsCategorias() {
+    public List<Categoria> pegarTodasAsCategorias() {
         return (List<Categoria>) categoriaData.findAll();
     }
 

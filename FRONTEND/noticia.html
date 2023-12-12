@@ -7,11 +7,39 @@
     <title>Document</title>
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="noticia.css">
+    <link rel="stylesheet" href="noticias.css">
 </head>
 
 <body>
     <div class="container">
         <!-- Outros elementos da página aqui -->
+        <div class="respiro"></div>
+        <div class="menu-lateral">
+            <div class="logo">NoticIAI</div>
+
+            <div class="categorias">
+                <div class="categoria-titulo">Categorias!</div>
+                <div class="categoria">Futebol</div>
+                <div class="categoria">Mercado</div>
+            </div>
+
+            <div class="filtro-data">
+                <label for="data">Filtra por Data</label>
+                <input type="date" name="data" id="data">
+            </div>
+
+            <div class="funcao">
+                <div class="sair">
+                    <img src="assets/img/sair.png" alt="">
+                </div>
+                <div class="cadastrar-categoria">
+                    <img src="assets/img/categoria.png" alt="">
+                </div>
+                <div class="criar-noticia">
+                    <img src="assets/img/criar.png" alt="">
+                </div>
+            </div>
+        </div>
 
         <form class="cadastro-noticia">
             <label for="titulo">Título da Notícia</label>
@@ -30,8 +58,43 @@
             <a href="noticias.html">Voltar as noticias!</a>
 
             <input type="submit" class="btn-noticia" value="Cadastrar Notícia">
+
+            <table id="newsTable">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Categoria</th>
+                        <th>Conteúdo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </form>
     </div>
+
+    <script>
+        fetch("http://localhost:8080/noticias/")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const tbody = document.querySelector('#newsTable tbody');
+                data.forEach(noticia => {
+                    const row = document.createElement('tr');
+                    const titleCell = document.createElement('td');
+                    titleCell.textContent = noticia.titulo;
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = noticia.categoria.categoria;
+                    const contentCell = document.createElement('td');
+                    contentCell.textContent = noticia.conteudo;
+                    row.appendChild(titleCell);
+                    row.appendChild(categoryCell);
+                    row.appendChild(contentCell);
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Erro:', error));
+    </script>
 
     <script>
         document.querySelector('.cadastro-noticia').addEventListener('submit', function (event) {
@@ -40,14 +103,21 @@
             const titulo = document.querySelector('#titulo').value;
             const categoria = document.querySelector('#categoria').value;
             const conteudo = document.querySelector('#conteudo').value;
+            const autor = JSON.parse(sessionStorage.getItem('userData'));
+
+            console.log(autor);
 
             const noticia = {
                 titulo: titulo,
-                categoria: categoria,
-                conteudo: conteudo
+                categoria: {
+                    id : 1,
+                    categoria : categoria
+                },
+                conteudo: conteudo,
+                autor: autor,
             };
 
-            fetch('http://localhost/noticias/', {
+            fetch("http://localhost:8080/noticias/", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -55,10 +125,11 @@
                 body: JSON.stringify(noticia)
             })
                 .then(response => response.json())
-                .then(data => console.log(data))
+                .then(data => {
+                    location.reload();
+                })
                 .catch(error => console.error('Error:', error));
         });
-
     </script>
 </body>
 
