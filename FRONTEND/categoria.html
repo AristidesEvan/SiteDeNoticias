@@ -7,21 +7,138 @@
     <title>Document</title>
     <link rel="stylesheet" href="reset.css" />
     <link rel="stylesheet" href="categoria.css" />
+    <link rel="stylesheet" href="noticias.css">
 </head>
 
 <body>
+
+    <script>
+        // Função para verificar se os dados do usuário estão na sessionStorage
+        function verificarLogin() {
+            // Recuperar os dados da sessionStorage
+            var userData = JSON.parse(sessionStorage.getItem('userData'));
+
+            // Verificar se os dados do usuário existem
+            if (userData == null) {
+                // Redirecionar para a página de login
+                window.location.href = "index.html";
+            }
+        }
+
+        // Chamar a função ao entrar na página
+        verificarLogin();
+    </script>
+
     <div class="container">
+
         <!-- Outros elementos da página aqui -->
+        <div class="respiro"></div>
+        <div class="menu-lateral">
+            <a href="noticias.html" class="logo">NoticIAI</a>
+
+            <div class="funcao">
+                <a id="sair" class="sair">
+                    <img src="assets/img/sair.png" alt="">
+                </a>
+                <a href="categoria.html" class="cadastrar-categoria">
+                    <img src="assets/img/categoria.png" alt="">
+                </a>
+                <a href="noticia.html" class="criar-noticia">
+                    <img src="assets/img/criar.png" alt="">
+                </a>
+            </div>
+        </div>
 
         <form id="cadastro-categoria">
             <label for="categoria">Nome da categoria!</label>
+            <span id="erro" class="oculto">A categoria já existe!</span>
             <input type="text" id="categoria" name="categoria" required />
 
             <a href="noticias.html">Voltar as noticias!</a>
 
             <input type="submit" class="btn-categoria" value="Cadastrar Categoria" />
+
+            <div class="pesquisa">
+                <label for="pesquisa">Pesquisa:</label>
+                <input type="text" id="pesquisa" name="pesquisa">
+                <button id="pesquisar">Pesquisar</button>
+            </div>
+
+            <div class="resultado">
+
+            </div>
+
+            <table id="newsTable">
+                <thead>
+                    <tr>
+                        <th>Categorias</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </form>
     </div>
+
+    <script>
+        document
+            .getElementById("sair")
+            .addEventListener("click", function (e) {
+                e.preventDefault();
+
+                sessionStorage.clear();
+                location.reload();
+            });
+
+        document
+            .getElementById("pesquisar")
+            .addEventListener("click", function (e) {
+                e.preventDefault();
+
+                var pesquisa = document.getElementById('pesquisa').value;
+                var resultado = document.getElementsByClassName("resultado");
+                resultado[0].innerHTML = "";
+
+                console.log(pesquisa);
+
+                var aux = "http://localhost:8080/categorias/" + pesquisa;
+
+                if (pesquisa != "") {
+                    fetch(aux)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            const tbody = document.querySelector('#newsTable tbody');
+                            data.forEach(categoria => {
+                                const divItem = document.createElement('div');
+                                divItem.className = 'item';
+                                divItem.textContent = categoria.categoria
+                                resultado[0].appendChild(divItem);
+                            });
+                        })
+                        .catch(error => console.error('Erro:', error));
+                }
+
+            });
+    </script>
+
+    <script>
+        fetch("http://localhost:8080/categorias/")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const tbody = document.querySelector('#newsTable tbody');
+                data.forEach(categoria => {
+                    sessionStorage.setItem('categorias', JSON.stringify(data));
+                    const row = document.createElement('tr');
+                    const categoriaCell = document.createElement('td');
+                    categoriaCell.textContent = categoria.categoria;
+                    row.appendChild(categoriaCell);
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Erro:', error));
+    </script>
 
     <script>
         document
@@ -31,24 +148,42 @@
 
                 var categoria = document.getElementById("categoria").value;
 
+                var categorias = JSON.parse(sessionStorage.getItem('categorias'));
+                var valorEncontrado = false;
+
+                for (var i = 0; i < categorias.length; i++) {
+                    // Verificar se o valor está presente na propriedade 'categoria'
+                    if (categorias[i].categoria == categoria) {
+                        valorEncontrado = true;
+                        break;  // Se encontrado, podemos parar a iteração
+                    }
+                }
+
                 var data = {
-                    categoria : categoria
+                    categoria: categoria
                 };
 
-                fetch("http://localhost:8080/categorias/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data),
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        console.log("Success:", data);
+                if (valorEncontrado) {
+                    document.getElementById('erro').classList.remove('oculto');
+                } else {
+                    fetch("http://localhost:8080/categorias/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
                     })
-                    .catch((error) => {
-                        console.error("Error:", error);
-                    });
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log("Success:", data);
+
+                            location.reload();
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+                }
+
             });
     </script>
 </body>

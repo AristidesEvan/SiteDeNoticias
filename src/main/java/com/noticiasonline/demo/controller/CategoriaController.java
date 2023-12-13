@@ -1,5 +1,6 @@
 package com.noticiasonline.demo.controller;
 import com.noticiasonline.demo.model.Categoria;
+import com.noticiasonline.demo.model.Noticia;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.noticiasonline.demo.service.CategoriaService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @CrossOrigin("*")
@@ -28,6 +31,18 @@ public class CategoriaController {
     public List<Categoria> pegarTodasAsCategorias() {
         return categoriaService.pegarTodasAsCategorias();
     }
+
+    @GetMapping("/{categoriaNome}")
+    public List<Categoria> pegarPorCategoria(@PathVariable String categoriaNome) {
+        List<Categoria> listaCategoria = categoriaService.pegaPorNome(categoriaNome);
+        if (listaCategoria.size() > 0) {
+            List<Categoria> categoria = listaCategoria;
+            return categoria;
+        } else {
+            return null;
+        }
+    }
+    
 
     @PostMapping("/")
     public Categoria salvarCategoria(@RequestBody Categoria categoria) {

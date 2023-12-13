@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.noticiasonline.demo.data.NoticiaData;
+import com.noticiasonline.demo.model.Categoria;
 import com.noticiasonline.demo.model.Noticia;
 
 @Component
@@ -28,6 +29,22 @@ public class NoticiaService {
 
     public void deletarNoticia(Long noticiaId) {
         noticiaData.deleteById(noticiaId);
+    }
+
+    public List<Noticia> pegaPorTitulo(String nome) {
+        return noticiaData.findByParteTitulo(nome);
+    }
+
+        public List<Noticia> pegaPorCategoria(String nome) {
+        return noticiaData.findByParteCategoria(nome);
+    }
+
+        public List<Noticia> pegaPorConteudo(String nome) {
+        return noticiaData.findByParteConteudo(nome);
+    }
+
+    public List<Noticia> pegarNoticiasPorCategoria(Categoria categoria) {
+        return (List<Noticia>) noticiaData.findByCategoria(categoria);
     }
 
 }

@@ -18,6 +18,12 @@ public class CategoriaService {
         return (List<Categoria>) categoriaData.findAll();
     }
 
+    public Categoria pegarPeloId(Long categoriaId) {
+        Categoria categoria = categoriaData.findById(categoriaId).orElse(null);
+
+        return categoria;
+    }
+
     public Categoria salvarCategoria(Categoria categoria) {
         return categoriaData.save(categoria);
     }
@@ -28,6 +34,14 @@ public class CategoriaService {
 
     public void deletarCategoria(Long categoriaId) {
         categoriaData.deleteById(categoriaId);
+    }
+
+    public List<Categoria> pegaPorNome(String nome) {
+        return categoriaData.findByParteCategoria(nome);
+    }
+
+    public List<Categoria> pegarPorCategoria(String categoria) {
+        return categoriaData.findByCategoria(categoria);
     }
 
 }

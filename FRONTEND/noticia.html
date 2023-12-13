@@ -11,33 +11,40 @@
 </head>
 
 <body>
+
+    <script>
+        // Função para verificar se os dados do usuário estão na sessionStorage
+        function verificarLogin() {
+            // Recuperar os dados da sessionStorage
+            var userData = JSON.parse(sessionStorage.getItem('userData'));
+
+            // Verificar se os dados do usuário existem
+            if (userData == null) {
+                // Redirecionar para a página de login
+                window.location.href = "index.html";
+            }
+        }
+
+        // Chamar a função ao entrar na página
+        verificarLogin();
+    </script>
+
     <div class="container">
         <!-- Outros elementos da página aqui -->
         <div class="respiro"></div>
         <div class="menu-lateral">
-            <div class="logo">NoticIAI</div>
-
-            <div class="categorias">
-                <div class="categoria-titulo">Categorias!</div>
-                <div class="categoria">Futebol</div>
-                <div class="categoria">Mercado</div>
-            </div>
-
-            <div class="filtro-data">
-                <label for="data">Filtra por Data</label>
-                <input type="date" name="data" id="data">
-            </div>
+            <a href="noticias.html" class="logo">NoticIAI</a>
 
             <div class="funcao">
-                <div class="sair">
+                <a id="sair" class="sair">
                     <img src="assets/img/sair.png" alt="">
-                </div>
-                <div class="cadastrar-categoria">
+                </a>
+                <a href="categoria.html" class="cadastrar-categoria">
                     <img src="assets/img/categoria.png" alt="">
-                </div>
-                <div class="criar-noticia">
+                </a>
+                <a href="noticia.html" class="criar-noticia">
                     <img src="assets/img/criar.png" alt="">
-                </div>
+                </a>
             </div>
         </div>
 
@@ -47,8 +54,6 @@
 
             <label for="categoria">Categoria da Notícia</label>
             <select id="categoria" name="categoria" required>
-                <option value="futebol">Futebol</option>
-                <option value="mercado">Mercado</option>
                 <!-- Mais opções aqui -->
             </select>
 
@@ -59,7 +64,31 @@
 
             <input type="submit" class="btn-noticia" value="Cadastrar Notícia">
 
-            <table id="newsTable">
+            <div class="pesquisa">
+                <select id="campo" name="campo" required>
+                    <option value="Titulo">Título</option>
+                    <option value="Categoria">Categoria</option>
+                    <option value="Conteudo">Conteúdo</option>
+                </select>
+                <label for="pesquisa">Pesquisa:</label>
+                <input type="text" id="pesquisa" name="pesquisa">
+                <button id="pesquisar">Pesquisar</button>
+            </div>
+
+            <table id="resultado">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Categoria</th>
+                        <th>Conteúdo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <div class="tabela-todos-dados">Tabala com todos os dados atualizados:</div>
+            <table id="TabaleNoticia">
                 <thead>
                     <tr>
                         <th>Título</th>
@@ -74,11 +103,88 @@
     </div>
 
     <script>
+        // Selecionar o botão 'pesquisar'
+        const botaoPesquisar = document.getElementById('pesquisar');
+        
+
+        // Adicionar um event listener ao botão 'pesquisar'
+        botaoPesquisar.addEventListener('click', function () {
+            // Obter o valor do input 'pesquisa'
+            const pesquisa = document.getElementById('pesquisa').value;
+            const tbody = document.querySelector('#resultado tbody');
+            tbody.innerHTML = "";
+
+            const seletor = document.getElementById('campo');
+            var valorSeletor = seletor.value;
+
+            console.log(valorSeletor);
+
+            var aux = "http://localhost:8080/noticias/por" + valorSeletor + "/" + pesquisa
+
+            console.log(aux);
+
+            if (pesquisa != "") {
+                fetch(aux)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Notícias:', data);
+
+                    data.forEach(noticia => {
+                    const row = document.createElement('tr');
+                    const celulaTitulo = document.createElement('td');
+                    celulaTitulo.textContent = noticia.titulo;
+                    const celulaCategoria = document.createElement('td');
+                    celulaCategoria.textContent = noticia.categoria.categoria;
+                    const celulaConteudo = document.createElement('td');
+                    celulaConteudo.textContent = noticia.conteudo;
+                    row.appendChild(celulaTitulo);
+                    row.appendChild(celulaCategoria);
+                    row.appendChild(celulaConteudo);
+                    tbody.appendChild(row);
+                });
+            })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+    </script>
+
+    <script>
+        document
+            .getElementById("sair")
+            .addEventListener("click", function (e) {
+                e.preventDefault();
+
+                sessionStorage.clear();
+                location.reload();
+            });
+    </script>
+
+    <script>
+        fetch('http://localhost:8080/categorias/')
+            .then(response => response.json())
+            .then(data => {
+                // Selecionar a div 'categorias' existente
+                const categoriasDiv = document.querySelector('#categoria');
+
+                // Adicionar as categorias
+                data.forEach(categoria => {
+                    const categoriaDiv = document.createElement('option');
+                    categoriaDiv.className = 'categoria';
+                    categoriaDiv.textContent = categoria.categoria;
+                    categoriaDiv.value = categoria.categoria;
+                    categoriasDiv.appendChild(categoriaDiv);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+
+    <script>
         fetch("http://localhost:8080/noticias/")
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                const tbody = document.querySelector('#newsTable tbody');
+                const tbody = document.querySelector('#TabaleNoticia tbody');
                 data.forEach(noticia => {
                     const row = document.createElement('tr');
                     const titleCell = document.createElement('td');
@@ -101,20 +207,26 @@
             event.preventDefault();
 
             const titulo = document.querySelector('#titulo').value;
-            const categoria = document.querySelector('#categoria').value;
+            const categoriaHTML = document.querySelector('#categoria').value;
             const conteudo = document.querySelector('#conteudo').value;
             const autor = JSON.parse(sessionStorage.getItem('userData'));
 
+            console.log(categoria);
+
             console.log(autor);
+
+            var storedCategorias = JSON.parse(sessionStorage.getItem('categorias'));
+            var storedUserData = JSON.parse(sessionStorage.getItem('userData'));
+
+            categoriaEncontrada = storedCategorias.find(categoria => categoria.categoria === categoriaHTML);
+
+            console.log(categoriaEncontrada);
 
             const noticia = {
                 titulo: titulo,
-                categoria: {
-                    id : 1,
-                    categoria : categoria
-                },
+                categoria: categoriaEncontrada,
                 conteudo: conteudo,
-                autor: autor,
+                autor: storedUserData
             };
 
             fetch("http://localhost:8080/noticias/", {

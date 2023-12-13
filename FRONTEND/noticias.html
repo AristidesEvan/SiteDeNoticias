@@ -16,102 +16,206 @@
         function verificarLogin() {
             // Recuperar os dados da sessionStorage
             var userData = JSON.parse(sessionStorage.getItem('userData'));
-            console.log(userData);
 
             // Verificar se os dados do usuário existem
-            if (userData.nome == null) {
+            if (userData == null) {
                 // Redirecionar para a página de login
                 window.location.href = "index.html";
             }
         }
 
         // Chamar a função ao entrar na página
-        window.onload = verificarLogin;
+        verificarLogin();
     </script>
 
     <div class="container">
 
         <div class="respiro"></div>
         <div class="menu-lateral">
-            <div class="logo">NoticIAI</div>
+            <a id="logo" href="noticias.html" class="logo">NoticIAI</a>
 
             <div class="categorias">
-                <div class="categoria-titulo">Categorias!</div>
-                <div class="categoria">Futebol</div>
-                <div class="categoria">Mercado</div>
+                <div id="todos" class="categoria-titulo">Categorias!</div>
+
             </div>
 
-            <div class="filtro-data">
-                <label for="data">Filtra por Data</label>
-                <input type="date" name="data" id="data">
+            <div class="pdfSimples">
+                <button class="pdf">
+                    PDF Simples
+                </button>
             </div>
 
             <div class="funcao">
-                <div class="sair">
+                <a id="sair" class="sair">
                     <img src="assets/img/sair.png" alt="">
-                </div>
-                <div class="cadastrar-categoria">
+                </a>
+                <a href="categoria.html" class="cadastrar-categoria">
                     <img src="assets/img/categoria.png" alt="">
-                </div>
-                <div class="criar-noticia">
+                </a>
+                <a href="noticia.html" class="criar-noticia">
                     <img src="assets/img/criar.png" alt="">
-                </div>
+                </a>
             </div>
         </div>
 
         <div class="noticias">
-            <div class="noticia">
-                <div class="titulo">
-                    Titulo da notícia
-                    <div class="categoria">
-                        futebol
-                    </div>
-                </div>
 
-                <div class="conteudo">
-                    Barcelona e Girona fizeram um ótimo primeiro tempo em Montjuic, e o time visitante foi para o
-                    intervalo na frente. Confirmando por que está brigando pela ponta da tabela, o Girona começou melhor
-                    e abriu o placar com Dovbyk, aos 11 minutos. Lewandowski empatou aos 18, de cabeça, após escanteio
-                    de Raphinha, mas a sensação do Espanhol voltou a liderar o placar aos 39, graças a um bonito gol de
-                    Miguel Gutiérrez, em chute da entrada da área.
-                </div>
-            </div>
         </div>
 
     </div>
 
+    <script>
+        document
+            .getElementById("sair")
+            .addEventListener("click", function (e) {
+                e.preventDefault();
+
+                sessionStorage.clear();
+                location.reload();
+            });
+
+        document
+            .getElementById("todos")
+            .addEventListener("click", function (e) {
+                e.preventDefault();
+
+                sessionStorage.setItem('noticias', JSON.stringify(null));
+
+                window.location.href = "http://127.0.0.1:5500/FRONTEND/noticias.html"
+            });
+    </script>
 
     <script>
-        fetch('http://localhost/noticias/')
+        fetch('http://localhost:8080/categorias/')
             .then(response => response.json())
             .then(data => {
-                const noticiasDiv = document.querySelector('.noticias');
+                // Selecionar a div 'categorias' existente
+                const categoriasDiv = document.querySelector('.categorias');
 
-                data.forEach(noticia => {
-                    const noticiaElement = document.createElement('div');
-                    noticiaElement.className = 'noticia';
+                // Adicionar as categorias
+                data.forEach(categoria => {
+                    const categoriaDiv = document.createElement('div');
+                    categoriaDiv.className = 'categoria';
+                    categoriaDiv.textContent = categoria.categoria;
+                    categoriaDiv.addEventListener('click', function () {
+                        console.log("clicou")
+                        const categoriaSelecionada = this.textContent;
 
-                    const tituloElement = document.createElement('div');
-                    tituloElement.className = 'titulo';
-                    tituloElement.textContent = noticia.titulo;
+                        fetch(`http://localhost:8080/noticias/${categoriaSelecionada}`)
+                            .then(response => response.json())
+                            .then(data => {
 
-                    const categoriaElement = document.createElement('div');
-                    categoriaElement.className = 'categoria';
-                    categoriaElement.textContent = noticia.categoria;
+                                sessionStorage.setItem('noticias', JSON.stringify(null));
+                                sessionStorage.setItem('noticias', JSON.stringify(data));
 
-                    const conteudoElement = document.createElement('div');
-                    conteudoElement.className = 'conteudo';
-                    conteudoElement.textContent = noticia.conteudo;
+                                location.reload();
 
-                    noticiaElement.appendChild(tituloElement);
-                    noticiaElement.appendChild(categoriaElement);
-                    noticiaElement.appendChild(conteudoElement);
-
-                    noticiasDiv.appendChild(noticiaElement);
+                                console.log("puxou aqui")
+                            })
+                            .catch(error => console.error('Error:', error));
+                    });
+                    categoriasDiv.appendChild(categoriaDiv);
                 });
             })
             .catch(error => console.error('Error:', error));
     </script>
+
+    <script>
+        var storedNoticias = JSON.parse(sessionStorage.getItem('noticias'));
+
+        if (storedNoticias == null) {
+            console.log(JSON.parse(sessionStorage.getItem('noticias')))
+            fetch('http://localhost:8080/noticias/')
+                .then(response => response.json())
+                .then(data => {
+
+                    sessionStorage.setItem('noticias', JSON.stringify(data));
+
+                    const noticiasDiv = document.querySelector('.noticias');
+
+                    data.forEach(noticia => {
+                        const noticiaElement = document.createElement('div');
+                        noticiaElement.className = 'noticia';
+
+                        const tituloElement = document.createElement('div');
+                        tituloElement.className = 'titulo';
+                        tituloElement.textContent = noticia.titulo;
+
+                        const categoriaElement = document.createElement('div');
+                        categoriaElement.className = 'categoriaNoticia';
+                        categoriaElement.textContent = noticia.categoria.categoria;
+
+                        const conteudoElement = document.createElement('div');
+                        conteudoElement.className = 'conteudo';
+                        conteudoElement.textContent = noticia.conteudo;
+
+                        tituloElement.appendChild(categoriaElement)
+                        noticiaElement.appendChild(tituloElement);
+                        noticiaElement.appendChild(conteudoElement);
+
+                        noticiasDiv.appendChild(noticiaElement);
+
+                        console.log("fez o padrão");
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            const noticiasDiv = document.querySelector('.noticias');
+
+            storedNoticias.forEach(noticia => {
+                const noticiaElement = document.createElement('div');
+                noticiaElement.className = 'noticia';
+
+                const tituloElement = document.createElement('div');
+                tituloElement.className = 'titulo';
+                tituloElement.textContent = noticia.titulo;
+
+                const categoriaElement = document.createElement('div');
+                categoriaElement.className = 'categoriaNoticia';
+                categoriaElement.textContent = noticia.categoria.categoria;
+
+                const conteudoElement = document.createElement('div');
+                conteudoElement.className = 'conteudo';
+                conteudoElement.textContent = noticia.conteudo;
+
+                tituloElement.appendChild(categoriaElement)
+                noticiaElement.appendChild(tituloElement);
+                noticiaElement.appendChild(conteudoElement);
+
+                noticiasDiv.appendChild(noticiaElement);
+
+                console.log("fez o da categoria");
+            });
+        }
+
+    </script>
+
+    <!-- <script>
+        const categorias = document.querySelectorAll('.categoria');
+
+        console.log(categorias);
+
+        // Adicionar uma função a cada elemento
+        categorias.forEach(categoria => {
+            categoria.addEventListener('click', function () {
+                console.log("clicou")
+                const categoriaSelecionada = this.textContent;
+
+                fetch(`http://localhost:8080/noticias/${categoriaSelecionada}`)
+                    .then(response => response.json())
+                    .then(data => {
+
+                        sessionStorage.setItem('noticias', JSON.stringify(null));
+                        sessionStorage.setItem('noticias', JSON.stringify(data));
+
+                        location.reload();
+
+                        console.log("puxou aqui")
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+    </script> -->
 </body>
 
 </html>
