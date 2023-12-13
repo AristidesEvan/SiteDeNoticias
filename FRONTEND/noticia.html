@@ -23,6 +23,10 @@
                 // Redirecionar para a página de login
                 window.location.href = "index.html";
             }
+
+            if (userData.tipo == "leitor") {
+                window.location.href = "noticias.html";
+            }
         }
 
         // Chamar a função ao entrar na página
@@ -39,10 +43,10 @@
                 <a id="sair" class="sair">
                     <img src="assets/img/sair.png" alt="">
                 </a>
-                <a href="categoria.html" class="cadastrar-categoria">
+                <a id="categoria-cadastro" href="categoria.html" class="cadastrar-categoria">
                     <img src="assets/img/categoria.png" alt="">
                 </a>
-                <a href="noticia.html" class="criar-noticia">
+                <a id="noticia-cadastro" href="noticia.html" class="criar-noticia">
                     <img src="assets/img/criar.png" alt="">
                 </a>
             </div>
@@ -101,6 +105,27 @@
             </table>
         </form>
     </div>
+
+    <script>
+        function tipoDeUsuario() {
+            var userData = JSON.parse(sessionStorage.getItem('userData'));
+
+            if (userData.tipo == "leitor") {
+                var categoriaCadastro = document.getElementById('categoria-cadastro');
+                categoriaCadastro.classList.add('oculto');
+
+                var noticiaCadastro = document.getElementById('noticia-cadastro');
+                noticiaCadastro.classList.add('oculto');
+            } else if (userData.tipo == "editor") {
+                var categoriaCadastro = document.getElementById('categoria-cadastro');
+                categoriaCadastro.classList.add('oculto');
+            }
+
+            console.log(userData);
+        }
+
+        tipoDeUsuario();
+    </script>
 
     <script>
         // Selecionar o botão 'pesquisar'

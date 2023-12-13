@@ -13,8 +13,7 @@
     <div class="form-card">
         <form id="registrationForm">
             <h1 class="title-login">Cadastro</h1>
-            <p>Digite os seus dados necessários para cadastro:</p>
-            <span class="oculto">Email já cadastrado!</span> <!-- Caso retorne um erro! -->
+            <span id="erro" class="oculto">Email já cadastrado!</span> <!-- Caso retorne um erro! -->
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" />
             <label for="email">Email:</label>
@@ -26,10 +25,14 @@
                 <select id="tipo" name="tipo">
                     <option value="leitor">Leitor</option>
                     <option value="editor">Editor</option>
+                    <option value="administrador">Administrador</option>
                 </select>
 
             </label>
+
             <input class="btn-cadastro" type="submit" value="Cadastrar" />
+
+            <a href="index.html">voltar para o login</a>
         </form>
         
     </div>
@@ -60,12 +63,19 @@
                     .then((response) => response.json())
                     .then((data) => {
                         console.log("Success:", data);
+
                         sessionStorage.setItem('userData', JSON.stringify(data));
-
                         var storedUserData = JSON.parse(sessionStorage.getItem('userData'));
-                        console.log(storedUserData.email);
 
-                        window.location.href = "http://127.0.0.1:5500/FRONTEND/noticias.html";
+                        if (storedUserData.email == "null") {
+                            document.getElementById('erro').classList.remove('oculto');
+                            sessionStorage.clear();
+                        } else {
+                            console.log(storedUserData.email);
+
+                            window.location.href = "http://127.0.0.1:5500/FRONTEND/noticias.html";
+                        }
+
                     })
                     .catch((error) => {
                         console.error("Error:", error);

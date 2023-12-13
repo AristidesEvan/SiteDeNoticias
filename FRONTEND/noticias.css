@@ -163,3 +163,20 @@
 .pdf:hover {
     background-color: rgb(234, 144, 0);
 }
+
+
+.pdfSimples {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.pdfSimples input {
+    margin: 1rem 0;
+    width: 80%;
+}
+
+.oculto {
+    display: none;
+}

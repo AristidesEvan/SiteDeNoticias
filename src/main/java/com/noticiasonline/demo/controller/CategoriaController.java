@@ -1,6 +1,5 @@
 package com.noticiasonline.demo.controller;
 import com.noticiasonline.demo.model.Categoria;
-import com.noticiasonline.demo.model.Noticia;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.noticiasonline.demo.service.CategoriaService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.noticiasonline.demo.service.CategoriaService;
 import com.noticiasonline.demo.service.NoticiaService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController

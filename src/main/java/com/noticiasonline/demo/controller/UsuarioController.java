@@ -33,9 +33,16 @@ public class UsuarioController {
 
     @PostMapping("/cadastro")
     public ResponseEntity<Usuario> cadastarUsuario(@RequestBody Usuario usuario) {
-        usuario.setDataDeRegistro(LocalDate.now());
-        Usuario usuarioSalvo = usuarioService.salvarUsuario(usuario);
-        return ResponseEntity.ok(usuarioSalvo);
+        if (usuarioService.pegarPeloEmail(usuario.getEmail()) == null) {
+            usuario.setDataDeRegistro(LocalDate.now());
+            Usuario usuarioSalvo = usuarioService.salvarUsuario(usuario);
+            return ResponseEntity.ok(usuarioSalvo);
+        } else {
+            usuario.setEmail("null");
+            usuario.setNome("null");
+            usuario.setDataDeRegistro(null);
+            return ResponseEntity.ok(usuario);
+        }
     }
     
     @PostMapping("/validar")

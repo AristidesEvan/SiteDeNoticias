@@ -39,9 +39,17 @@
 
             </div>
 
-            <div class="pdfSimples">
-                <button class="pdf">
+            <div id="pdfSimples" class="pdfSimples">
+                <a href="http://localhost:8080/pdf/" target="_blank" class="pdf" >
                     PDF Simples
+                </a>
+            </div>
+
+            <div id="pdfComplexo" class="pdfSimples">
+                <label for="pdfComplexo">PDF por nome:</label>
+                <input type="text" name="pdfComplexo" id="input-pdfComplexo">
+                <button onclick="gerarPDF()" id="botao-pdfComplexo" class="pdf" >
+                    PDF Complexo
                 </button>
             </div>
 
@@ -49,10 +57,10 @@
                 <a id="sair" class="sair">
                     <img src="assets/img/sair.png" alt="">
                 </a>
-                <a href="categoria.html" class="cadastrar-categoria">
+                <a id="categoria-cadastro" href="categoria.html" class="cadastrar-categoria">
                     <img src="assets/img/categoria.png" alt="">
                 </a>
-                <a href="noticia.html" class="criar-noticia">
+                <a id="noticia-cadastro" href="noticia.html" class="criar-noticia">
                     <img src="assets/img/criar.png" alt="">
                 </a>
             </div>
@@ -63,6 +71,60 @@
         </div>
 
     </div>
+
+    <script>
+        function gerarPDF() {
+            // Obtém o valor do input
+            var nome = document.getElementById("input-pdfComplexo").value;
+
+            // Verifica se o nome não está vazio
+            if (nome.trim() !== "") {
+                // Constrói a URL da API com o nome fornecido
+                var apiUrl = "http://localhost:8080/pdf/pdfPorNome/" + nome;
+
+                // Abre a URL em uma nova janela (pode ser ajustado conforme necessário)
+                window.open(apiUrl, "_blank");
+            } else {
+                // Exibe uma mensagem de erro se o input estiver vazio
+                alert("Por favor, insira um nome válido.");
+            }
+        }
+    </script>
+
+    <script>
+        function tipoDeUsuario() {
+            var userData = JSON.parse(sessionStorage.getItem('userData'));
+
+            if (userData.tipo == "leitor") {
+                var categoriaCadastro = document.getElementById('categoria-cadastro');
+                categoriaCadastro.classList.add('oculto');
+
+                var noticiaCadastro = document.getElementById('noticia-cadastro');
+                noticiaCadastro.classList.add('oculto');
+
+                var pdfSimples = document.getElementById('pdfSimples');
+                pdfSimples.classList.add('oculto');
+
+                var pdfComplexo = document.getElementById('pdfComplexo');
+                pdfComplexo.classList.add('oculto');
+
+                console.log(pdfSimples);
+            } else if (userData.tipo == "editor") {
+                var categoriaCadastro = document.getElementById('categoria-cadastro');
+                categoriaCadastro.classList.add('oculto');
+
+                var pdfSimples = document.getElementById('pdfSimples');
+                pdfSimples.classList.add('oculto');
+
+                var pdfComplexo = document.getElementById('pdfComplexo');
+                pdfComplexo.classList.add('oculto');
+            }
+
+            console.log(userData);
+        }
+
+        tipoDeUsuario();
+    </script>
 
     <script>
         document
@@ -98,7 +160,6 @@
                     categoriaDiv.className = 'categoria';
                     categoriaDiv.textContent = categoria.categoria;
                     categoriaDiv.addEventListener('click', function () {
-                        console.log("clicou")
                         const categoriaSelecionada = this.textContent;
 
                         fetch(`http://localhost:8080/noticias/${categoriaSelecionada}`)
@@ -109,8 +170,6 @@
                                 sessionStorage.setItem('noticias', JSON.stringify(data));
 
                                 location.reload();
-
-                                console.log("puxou aqui")
                             })
                             .catch(error => console.error('Error:', error));
                     });
@@ -154,8 +213,6 @@
                         noticiaElement.appendChild(conteudoElement);
 
                         noticiasDiv.appendChild(noticiaElement);
-
-                        console.log("fez o padrão");
                     });
                 })
                 .catch(error => console.error('Error:', error));
@@ -183,39 +240,9 @@
                 noticiaElement.appendChild(conteudoElement);
 
                 noticiasDiv.appendChild(noticiaElement);
-
-                console.log("fez o da categoria");
             });
         }
 
     </script>
-
-    <!-- <script>
-        const categorias = document.querySelectorAll('.categoria');
-
-        console.log(categorias);
-
-        // Adicionar uma função a cada elemento
-        categorias.forEach(categoria => {
-            categoria.addEventListener('click', function () {
-                console.log("clicou")
-                const categoriaSelecionada = this.textContent;
-
-                fetch(`http://localhost:8080/noticias/${categoriaSelecionada}`)
-                    .then(response => response.json())
-                    .then(data => {
-
-                        sessionStorage.setItem('noticias', JSON.stringify(null));
-                        sessionStorage.setItem('noticias', JSON.stringify(data));
-
-                        location.reload();
-
-                        console.log("puxou aqui")
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-        });
-    </script> -->
 </body>
-
 </html>

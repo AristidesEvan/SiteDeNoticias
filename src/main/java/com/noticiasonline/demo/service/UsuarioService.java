@@ -30,6 +30,14 @@ public class UsuarioService {
         usuarioData.deleteById(usuarioId);
     }
 
+    public Usuario pegarPeloEmail(String email) {
+        return usuarioData.findByEmail(email);
+    }
+
+    public List<Usuario> pegarPeloNome(String nome) {
+        return usuarioData.findByParteNome(nome);
+    }
+
     public Usuario validarEmailESenha(String email, String senha) {
         return usuarioData.findByEmailAndSenha(email, senha);
     }

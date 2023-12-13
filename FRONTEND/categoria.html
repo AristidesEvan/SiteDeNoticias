@@ -23,6 +23,10 @@
                 // Redirecionar para a página de login
                 window.location.href = "index.html";
             }
+
+            if (userData.tipo == "leitor" || userData.tipo == "editor") {
+                window.location.href = "noticias.html";
+            }
         }
 
         // Chamar a função ao entrar na página
