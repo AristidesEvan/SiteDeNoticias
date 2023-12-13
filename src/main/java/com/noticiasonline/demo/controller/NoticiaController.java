@@ -37,7 +37,7 @@ public class NoticiaController {
     }
 
     @GetMapping("/{categoriaNome}")
-    public List<Noticia> getMethodName(@PathVariable String categoriaNome) {
+    public List<Noticia> pegarPorNomeCategoria(@PathVariable String categoriaNome) {
         List<Categoria> listaCategoria = categoriaService.pegarPorCategoria(categoriaNome);
         Categoria categoria = listaCategoria.get(0);
 
