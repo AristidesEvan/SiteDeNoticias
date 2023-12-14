@@ -155,14 +155,18 @@
                 var categorias = JSON.parse(sessionStorage.getItem('categorias'));
                 var valorEncontrado = false;
 
-                for (var i = 0; i < categorias.length; i++) {
-                    // Verificar se o valor está presente na propriedade 'categoria'
-                    if (categorias[i].categoria == categoria) {
-                        valorEncontrado = true;
-                        break;  // Se encontrado, podemos parar a iteração
+                console.log(categorias);
+
+                if (categorias != null) {
+                    for (var i = 0; i < categorias.length; i++) {
+                        // Verificar se o valor está presente na propriedade 'categoria'
+                        if (categorias[i].categoria == categoria) {
+                            valorEncontrado = true;
+                            break;  // Se encontrado, podemos parar a iteração
+                        }
                     }
                 }
-
+                
                 var data = {
                     categoria: categoria
                 };
